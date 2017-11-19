@@ -65,9 +65,9 @@
         <td width="30%">
             <div align="right" id="timer"
                  class="timerFont"></div>
-            <br/>
+            <%--<br/>
             <div align="right" id="decisionTime"
-                 class="timerFont"></div>
+                 class="timerFont"></div>--%>
         </td>
     </tr>
     </tbody>
@@ -202,5 +202,5 @@
 </table>
 <jsp:include page="../foot.jsp"/>
 </body>
-<script language="javascript" src="js/main_bargain_reply_price.js"></script>
+<script language="javascript" src="js/main_bargain_reply_price_201711192332.js"></script>
 </html>

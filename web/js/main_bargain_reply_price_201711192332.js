@@ -159,8 +159,8 @@ function pushData() {
                     }
                     var leftSeconds = returnObj.leftSeconds;
                     document.getElementById("timer").innerHTML = "本次谈判剩余时间:" + leftSeconds + "";
-                    var leftDecisionSeconds = returnObj.leftDecisionSeconds;
-                    document.getElementById("decisionTime").innerHTML = "本次决策剩余时间:" + leftDecisionSeconds + "";
+                    // var leftDecisionSeconds = returnObj.leftDecisionSeconds;
+                    // document.getElementById("decisionTime").innerHTML = "本次决策剩余时间:" + leftDecisionSeconds + "";
 
                 } else if (action == "bargain") {
                     var status = returnObj.status;
