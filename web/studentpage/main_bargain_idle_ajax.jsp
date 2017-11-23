@@ -88,7 +88,9 @@
                     if (bargainParticipant.getCurrentCycle() < bargainExperiments.getCurrentCycle()) {//当期还未完成
                         bargainParticipantDao.update(bargainParticipant);
                         // 匹配对手进行谈判,去数据库中搜索
-                        bargainMatchDao = new BargainMatchDao();
+//                        bargainMatchDao = new BargainMatchDao();
+                        bargainMatchDao.refine(Integer.parseInt(participantId),
+                                bargainExperiments.getId().intValue());
                         BargainMatch bargainMatch = bargainMatchDao.findMatch(Integer.parseInt(participantId),
                                 bargainExperiments.getId().intValue());
                         // TODO 查询判断所有的匹配是否已经结束,进入结束页面

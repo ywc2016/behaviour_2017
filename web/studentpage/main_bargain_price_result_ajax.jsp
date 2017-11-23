@@ -31,13 +31,17 @@
     BargainParameter bargainParameter = null;
 
     if (bargainExperiments.getExperimentState() == 0) {
-        bargainMatch = bargainMatchDao.findByKey(bargainParticipant.getMatchId());
+        try {
+            bargainMatch = bargainMatchDao.findByKey(bargainParticipant.getMatchId());
+            identity = bargainMatch.getParticipantId().equals(bargainParticipant.getId()) ? "first" : "second";
+            bargainData = bargainDataDao.findByKey(bargainMatch.getCurrentDataId());
+            bargainParameter = bargainParameterDao.findByKey(bargainExperiments.getParId());
+        } catch (Exception e) {
+            //刷新页面
+            response.sendRedirect(basePath + "studentpage/login.jsp");
+            e.printStackTrace();
+        }
 
-        identity = bargainMatch.getParticipantId().equals(bargainParticipant.getId()) ? "first" : "second";
-
-        bargainData = bargainDataDao.findByKey(bargainMatch.getCurrentDataId());
-
-        bargainParameter = bargainParameterDao.findByKey(bargainExperiments.getParId());
     }
     //处理不同的action
     if (action.equals("timer")) {
@@ -137,6 +141,7 @@
         J_return.put("action", action);
         out.clear();
         out.println(J_return);
+        return;
     } else {
         out.clear();
         out.println("错误的操作参数！");

@@ -86,5 +86,5 @@
 <jsp:include page="../foot.jsp"/>
 
 </body>
-<script language="javascript" src="js/main_bargain_idle.js"></script>
+<script language="javascript" src="js/main_bargain_idle_201711221409.js"></script>
 </html>

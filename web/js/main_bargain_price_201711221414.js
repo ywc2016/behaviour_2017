@@ -1,115 +1,115 @@
 window.onload = function () {
     timer();
-    $.ajax({
-        url: './ajax/getRandomNeeds_ajax.jsp',
-        success: function (data1) {
-            var json = JSON.parse(data1);
-            var data = json.randomNeeds;
-            var myChart = echarts.init(document.getElementById('echarts1'));
-            var myRegression = ecStat.regression('linear', data);
-            $('#mean').html(json.mean);
-            $('#standardDeviation').html(json.standardDeviation);
-            myRegression.points.sort(function (a, b) {
-                return a[0] - b[0];
-            });
-
-            option = {
-                toolbox: {
-
-                    show: true,
-
-                    feature: {
-
-                        saveAsImage: {
-
-                            show: true,
-
-                            excludeComponents: ['toolbox'],
-
-                            pixelRatio: 2
-
-                        }
-
-                    }
-
-                },
-
-                title: {
-                    text: '需求量',
-                    subtext: '',
-                    sublink: '',
-                    left: 'center'
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross'
-                    }
-                },
-                xAxis: {
-                    type: 'value',
-                    splitLine: {
-                        lineStyle: {
-                            type: 'dashed'
-                        }
-                    },
-                },
-                yAxis: {
-                    type: 'value',
-                    min: 1.5,
-                    splitLine: {
-                        lineStyle: {
-                            type: 'dashed'
-                        }
-                    },
-                },
-                series: [{
-                    name: 'scatter',
-                    type: 'scatter',
-                    label: {
-                        emphasis: {
-                            show: true,
-                            position: 'left',
-                            textStyle: {
-                                color: 'blue',
-                                fontSize: 16
-                            }
-                        }
-                    },
-                    data: data
-                } /*, {
-					name : 'line',
-					type : 'line',
-					showSymbol : false,
-					data : myRegression.points,
-					markPoint : {
-						itemStyle : {
-							normal : {
-								color : 'transparent'
-							}
-						},
-						label : {
-							normal : {
-								show : true,
-								position : 'left',
-								formatter : myRegression.expression,
-								textStyle : {
-									color : '#333',
-									fontSize : 14
-								}
-							}
-						},
-						data : [ {
-							coord : myRegression.points[myRegression.points.length - 1]
-						} ]
-					}
-				}*/]
-            };
-            myChart.setOption(option);
-        },
-        error: function () {
-        }
-    });
+    // $.ajax({
+    //     url: './ajax/getRandomNeeds_ajax.jsp',
+    //     success: function (data1) {
+    //         var json = JSON.parse(data1);
+    //         var data = json.randomNeeds;
+    //         var myChart = echarts.init(document.getElementById('echarts1'));
+    //         var myRegression = ecStat.regression('linear', data);
+    //         $('#mean').html(json.mean);
+    //         $('#standardDeviation').html(json.standardDeviation);
+    //         myRegression.points.sort(function (a, b) {
+    //             return a[0] - b[0];
+    //         });
+    //
+    //         option = {
+    //             toolbox: {
+    //
+    //                 show: true,
+    //
+    //                 feature: {
+    //
+    //                     saveAsImage: {
+    //
+    //                         show: true,
+    //
+    //                         excludeComponents: ['toolbox'],
+    //
+    //                         pixelRatio: 2
+    //
+    //                     }
+    //
+    //                 }
+    //
+    //             },
+    //
+    //             title: {
+    //                 text: '需求量',
+    //                 subtext: '',
+    //                 sublink: '',
+    //                 left: 'center'
+    //             },
+    //             tooltip: {
+    //                 trigger: 'axis',
+    //                 axisPointer: {
+    //                     type: 'cross'
+    //                 }
+    //             },
+    //             xAxis: {
+    //                 type: 'value',
+    //                 splitLine: {
+    //                     lineStyle: {
+    //                         type: 'dashed'
+    //                     }
+    //                 },
+    //             },
+    //             yAxis: {
+    //                 type: 'value',
+    //                 min: 1.5,
+    //                 splitLine: {
+    //                     lineStyle: {
+    //                         type: 'dashed'
+    //                     }
+    //                 },
+    //             },
+    //             series: [{
+    //                 name: 'scatter',
+    //                 type: 'scatter',
+    //                 label: {
+    //                     emphasis: {
+    //                         show: true,
+    //                         position: 'left',
+    //                         textStyle: {
+    //                             color: 'blue',
+    //                             fontSize: 16
+    //                         }
+    //                     }
+    //                 },
+    //                 data: data
+    //             } /*, {
+    // 			name : 'line',
+    // 			type : 'line',
+    // 			showSymbol : false,
+    // 			data : myRegression.points,
+    // 			markPoint : {
+    // 				itemStyle : {
+    // 					normal : {
+    // 						color : 'transparent'
+    // 					}
+    // 				},
+    // 				label : {
+    // 					normal : {
+    // 						show : true,
+    // 						position : 'left',
+    // 						formatter : myRegression.expression,
+    // 						textStyle : {
+    // 							color : '#333',
+    // 							fontSize : 14
+    // 						}
+    // 					}
+    // 				},
+    // 				data : [ {
+    // 					coord : myRegression.points[myRegression.points.length - 1]
+    // 				} ]
+    // 			}
+    // 		}*/]
+    //         };
+    //         myChart.setOption(option);
+    //     },
+    //     error: function () {
+    //     }
+    // });
 }
 
 function submitform() {
@@ -194,7 +194,7 @@ function pushData() {
                         window.location.href = basePath
                             + "servlet/bargainTransform";
                     } else {
-                        alert(status);
+                        console.log(status);
                     }
                 } else if (action == "reply1") {
                     window.location.href = basePath
@@ -215,13 +215,13 @@ function pushData() {
                     document.getElementById('oppositeProfit2').innerText = returnObj.oppositeProfit2;
                 } else {
 
-                    alert("1");
+                    console.log("1");
                 }
             } catch (e) {
-                alert(http_request.responseText);
+                console.log(http_request.responseText);
             }
         } else { // ���0�3�0�8���0�9�0�4�0�1�0�0�0�3�0�3�0�2�0�5�0�2�0�0�0�0
-            alert("2");
+            console.log("2");
         }
     }
 // console.log("a");

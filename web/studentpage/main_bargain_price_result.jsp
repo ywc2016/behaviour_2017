@@ -98,7 +98,7 @@
 
 
             <div align="center">
-                <button class="myFont1" href="javascript:void(0);" onclick="finishCheck();">结果查看完毕</button>
+                <button class="myFont1" href="javascript:void(0);" onclick="finishCheck();">进入下一轮谈判</button>
             </div>
 
             <table class="myTableHistory" align="center">
@@ -179,5 +179,5 @@
 </table>
 <jsp:include page="../foot.jsp"/>
 </body>
-<script language="javascript" src="js/main_bargain_price_result.js"></script>
+<script language="javascript" src="js/main_bargain_price_result_201711221418.js"></script>
 </html>

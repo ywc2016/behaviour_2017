@@ -63,6 +63,7 @@
         }
     }
 %>
+
 <base href="<%=basePath%>" data-genuitec-lp-enabled="false" data-genuitec-file-id="wc1-16"
       data-genuitec-path="/behaviourDC/WebRoot/comm.jsp"/>
 <meta http-equiv="pragma" content="no-cache"/>

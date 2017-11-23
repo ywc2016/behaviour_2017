@@ -41,13 +41,13 @@ function pushData() {
 							+ "servlet/bargainTransform?status=" + status;
 					}
 				} else {
-					alert("1");
+                    console.log("1");
 				}
 			} catch (e) {
-				alert(http_request.responseText);
+                console.log(http_request.responseText);
 			}
 		} else { // ���0�3�0�8���0�9�0�4�0�1�0�0�0�3�0�3�0�2�0�5�0�2�0�0�0�0
-			alert("2");
+			console.log("2");
 		}
 	}
 // console.log("a");

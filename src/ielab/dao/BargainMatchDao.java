@@ -1,18 +1,26 @@
 package ielab.dao;
 
+import ielab.bean.Rounds;
 import ielab.hibernate.BargainExperiments;
 import ielab.hibernate.BargainMatch;
 import ielab.hibernate.BargainParameter;
 import ielab.hibernate.BargainParticipant;
+import lombok.NonNull;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import java.util.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 public class BargainMatchDao extends BaseDao<BargainMatch> {
+
+
+    private BargainParticipantDao bargainParticipantDao = new BargainParticipantDao();
+    private BargainParameterDao bargainParameterDao = new BargainParameterDao();
+    private BargainExperimentsDao bargainExperimentsDao = new BargainExperimentsDao();
 
     public static void main(String[] args) {
         // new BargainMatchDao().initBargainMatch(1);
@@ -28,9 +36,7 @@ public class BargainMatchDao extends BaseDao<BargainMatch> {
      * @param numberOfRandom 随机需求的个数
      */
     public void initBargainMatch(int experimentId, int numberOfRandom) {
-        BargainMatchDao bargainMatchDao = new BargainMatchDao();
-        BargainParticipantDao bargainParticipantDao = new BargainParticipantDao();
-        BargainExperimentsDao bargainExperimentsDao = new BargainExperimentsDao();
+
         BargainExperiments bargainExperiments = bargainExperimentsDao.findByKey(experimentId);
         if (bargainExperiments == null) {
             return;
@@ -52,26 +58,25 @@ public class BargainMatchDao extends BaseDao<BargainMatch> {
 
         List<BargainParticipant> bargainParticipants = bargainParticipantDao.findByPropertyEqual("experimentId",
                 experimentId + "", "int");
-        // 将匹配分组信息写入数据库
 
-        for (int i = 0; i < numOfParticipants; i++) {
-            for (int j = 0; j < numOfParticipants; j++) {
-                if (i == j) {
-                    continue;
-                }
-                int participantId = bargainParticipants.get(i).getId();
-                int secondParticipantId = bargainParticipants.get(j).getId();
+        // 将匹配分组信息写入数据库,并加上轮数
+
+        Rounds rounds = new Rounds(bargainParticipants.size());
+        int[][] rounds_ = rounds.getRounds();
+        replaceNumberWithParticipantId(rounds_, experimentId);
+        for (int i = 0; i < rounds_.length; i++) {
+            for (int j = 0; j < numOfParticipants; j += 2) {
+
                 String status = "未完成";
-
                 BargainMatch bargainMatch = new BargainMatch();
                 bargainMatch.setExperimentId(experimentId);
-                bargainMatch.setParticipantId(participantId);
-                bargainMatch.setSecondParticipantId(secondParticipantId);
+                bargainMatch.setParticipantId(rounds_[i][j]);
+                bargainMatch.setSecondParticipantId(rounds_[i][j + 1]);
                 bargainMatch.setStatus(status);
                 bargainMatch.setParticipantStatus("未开始");
                 bargainMatch.setSecomdParticipantStatus("未开始");
-
-                bargainMatchDao.save(bargainMatch);
+                bargainMatch.setCycle(i + 1);
+                this.save(bargainMatch);
             }
         }
 
@@ -88,6 +93,27 @@ public class BargainMatchDao extends BaseDao<BargainMatch> {
         bargainExperimentsDao.update(bargainExperiments);
     }
 
+    private void replaceNumberWithParticipantId(int[][] rounds_, int experimentId) {
+        BargainExperiments bargainExperiments = bargainExperimentsDao.findByKey(experimentId);
+        if (bargainExperiments == null) {
+            return;
+        }
+        @NonNull List<BargainParticipant> bargainParticipants = bargainParticipantDao
+                .findByPropertyEqual("experimentId",
+                        experimentId + "", "" +
+                                "long");
+        int[] ids = new int[bargainParticipants.size()];
+        for (BargainParticipant bargainParticipant : bargainParticipants) {
+            ids[bargainParticipant.getNumber() - 1] = bargainParticipant.getId();
+        }
+
+        for (int i = 0; i < rounds_.length; i++) {
+            for (int j = 0; j < rounds_[0].length; j++) {
+                rounds_[i][j] = ids[rounds_[i][j] - 1];
+            }
+        }
+    }
+
     /**
      * 根据参与者id和实验id返回匹配结果,如果结束则返回null
      *
@@ -96,71 +122,295 @@ public class BargainMatchDao extends BaseDao<BargainMatch> {
      */
     public BargainMatch findMatch(int participantId, int experimentId) {
         synchronized (this.getClass()) {
-            BargainParameterDao bargainParameterDao = new BargainParameterDao();
-            BargainExperimentsDao bargainExperimentsDao = new BargainExperimentsDao();
-            BargainMatchDao bargainMatchDao = new BargainMatchDao();
+
 
             BargainExperiments bargainExperiments = bargainExperimentsDao.findByKey(experimentId);
             BargainParameter bargainParameter = bargainParameterDao.findByKey(bargainExperiments.getParId());
+            BargainParticipant bargainParticipant = bargainParticipantDao.findByKey(participantId);
+
             try {
-                String queryString = "from " + typeClass().getCanonicalName()
-                        + " as a ,BargainParticipant as b,BargainParticipant as c "
+                String queryString = "from BargainMatch  as a ,BargainParticipant as b,BargainParticipant as c "
                         + " where a.participantId = b.id and a.experimentId = b.experimentId and "
                         + " a.secondParticipantId = c.id and a.experimentId = c.experimentId"
                         + " and b.status = '空闲中' and c.status = '空闲中'"
-                        + " and a.experimentId = :experimentId and a.participantId = :participantId and a.status = '未完成'";
+                        + " and a.experimentId = :experimentId and (a.participantId = :participantId ) " +
+                        "and a.status = '未完成' and a.cycle= :cycle";
                 Session session = sessionFactory.getCurrentSession();
                 session.beginTransaction();
                 Query query = session.createQuery(queryString);
                 query.setInteger("experimentId", experimentId);
                 query.setInteger("participantId", participantId);
+                query.setInteger("cycle", bargainParticipant.getCurrentCycle() + 1);
+
                 List pojos = query.list();
                 session.getTransaction().commit();
 
                 if (pojos.size() == 0) {
                     return null;
                 }
-
-                // 必须匹配到符合当前周期的用户
-
                 Iterator iterator = pojos.iterator();
-                for (; iterator.hasNext(); ) {
+
+                if (iterator.hasNext()) {
                     Object[] objects = (Object[]) iterator.next();
                     BargainMatch bargainMatch = (BargainMatch) objects[0];
                     BargainParticipant bargainParticipant1 = (BargainParticipant) objects[1];
                     BargainParticipant bargainParticipant2 = (BargainParticipant) objects[2];
 
-                    if (bargainParticipant1.getStatus().equals("空闲中")
-                            && bargainParticipant1.getCurrentCycle() < bargainExperiments.getCurrentCycle()
-                            && bargainParticipant2.getStatus().equals("空闲中")
-                            && bargainParticipant2.getCurrentCycle() < bargainExperiments.getCurrentCycle()) {// 符合周期条件
-                        // 设置用户的状态
-                        BargainParticipantDao bargainParticipantDao = new BargainParticipantDao();
+//                  设置用户的状态
+                    if (bargainParticipant1.getStatus().equals("空闲中")) {
                         bargainParticipant1.setStatus("谈判中");
+                    }
+                    if (bargainParticipant1.getCurrentCycle() < bargainExperiments.getCurrentCycle()) {
                         bargainParticipant1.setCurrentCycle(bargainParticipant1.getCurrentCycle() + 1);//周期往后推1
-
-                        bargainParticipant2.setStatus("谈判中");
-                        bargainParticipant2.setCurrentCycle(bargainParticipant2.getCurrentCycle() + 1);//周期往后推1
-
-                        bargainParticipant1.setMatchId(bargainMatch.getId());
-                        bargainParticipant2.setMatchId(bargainMatch.getId());
-                        bargainParticipantDao.update(bargainParticipant1);
-                        bargainParticipantDao.update(bargainParticipant2);
-
-                        //设置这轮的开始时间
-                        bargainMatch.setBeginTime(new Timestamp(new Date().getTime()));
-                        bargainMatch.setCycle(bargainExperiments.getCurrentCycle());
-                        bargainMatchDao.update(bargainMatch);
-
-                        return bargainMatch;
                     }
 
+                    if (bargainParticipant2.getStatus().equals("空闲中")) {
+                        bargainParticipant2.setStatus("谈判中");
+                    }
+                    if (bargainParticipant2.getCurrentCycle() < bargainExperiments.getCurrentCycle()) {
+                        bargainParticipant2.setCurrentCycle(bargainParticipant2.getCurrentCycle() + 1);//周期往后推1
+                    }
+                    if (bargainParticipant1.getMatchId() == null) {
+
+                        bargainParticipant1.setMatchId(bargainMatch.getId());
+                    }
+
+                    if (bargainParticipant2.getMatchId() == null) {
+
+                        bargainParticipant2.setMatchId(bargainMatch.getId());
+                    }
+
+                    bargainParticipantDao.update(bargainParticipant1);
+                    bargainParticipantDao.update(bargainParticipant2);
+
+                    //设置这轮的开始时间
+                    if (bargainMatch.getBeginTime() == null) {
+                        bargainMatch.setBeginTime(new Timestamp(new Date().getTime()));
+                    }
+//                    bargainMatch.setCycle(bargainExperiments.getCurrentCycle());
+                    this.update(bargainMatch);
+                    return bargainMatch;
+
                 }
-                return null;
-            } catch (RuntimeException re) {
+//                Iterator iterator = pojos.iterator();
+//                for (; iterator.hasNext(); ) {
+//                    Object[] objects = (Object[]) iterator.next();
+//                    BargainMatch bargainMatch = (BargainMatch) objects[0];
+//                    BargainParticipant bargainParticipant1 = (BargainParticipant) objects[1];
+//                    BargainParticipant bargainParticipant2 = (BargainParticipant) objects[2];
+//
+//                    if (bargainParticipant1.getStatus().equals("空闲中")
+//                            && bargainParticipant1.getCurrentCycle() < bargainExperiments.getCurrentCycle()
+//                            && bargainParticipant2.getStatus().equals("空闲中")
+//                            && bargainParticipant2.getCurrentCycle() < bargainExperiments.getCurrentCycle()) {// 符合周期条件
+//
+//                        //判断是否可以这样匹配,考虑到接下来的用户找不到匹配项
+////                        if (!canMatch(bargainMatch, bargainExperiments, new ArrayList<Integer>(), new ArrayList<Integer>())) {
+////                            continue;
+////                        }
+//
+//                        // 设置用户的状态
+//                        BargainParticipantDao bargainParticipantDao = new BargainParticipantDao();
+//                        bargainParticipant1.setStatus("谈判中");
+//                        bargainParticipant1.setCurrentCycle(bargainParticipant1.getCurrentCycle() + 1);//周期往后推1
+//
+//                        bargainParticipant2.setStatus("谈判中");
+//                        bargainParticipant2.setCurrentCycle(bargainParticipant2.getCurrentCycle() + 1);//周期往后推1
+//
+//                        bargainParticipant1.setMatchId(bargainMatch.getId());
+//                        bargainParticipant2.setMatchId(bargainMatch.getId());
+//                        bargainParticipantDao.update(bargainParticipant1);
+//                        bargainParticipantDao.update(bargainParticipant2);
+//
+//                        //设置这轮的开始时间
+//                        bargainMatch.setBeginTime(new Timestamp(new Date().getTime()));
+//                        bargainMatch.setCycle(bargainExperiments.getCurrentCycle());
+//                        bargainMatchDao.update(bargainMatch);
+//
+//                        return bargainMatch;
+//                    }
+//
+//                }
+//                return null;
+            } catch (Exception re) {
                 throw re;
             }
+            return null;
         }
+
+    }
+
+    private boolean canMatch(BargainMatch bargainMatch, BargainExperiments bargainExperiments,
+                             List<Integer> bargainParticipantIdList, List<Integer> bargainMatchIdList) {
+
+        BargainParticipantDao bargainParticipantDao = new BargainParticipantDao();
+        BargainMatchDao bargainMatchDao = new BargainMatchDao();
+
+        BargainParticipant bargainParticipant1 = bargainParticipantDao.findByKey(bargainMatch.getParticipantId());
+        BargainParticipant bargainParticipant2 = bargainParticipantDao.findByKey(bargainMatch.getSecondParticipantId());
+
+        try {
+//            bargainParticipant1.setStatus("谈判中");
+//            bargainParticipant1.setCurrentCycle(bargainParticipant1.getCurrentCycle() + 1);//周期往后推1
+//
+//            bargainParticipant2.setStatus("谈判中");
+//            bargainParticipant2.setCurrentCycle(bargainParticipant2.getCurrentCycle() + 1);//周期往后推1
+//
+//            bargainParticipant1.setMatchId(bargainMatch.getId());
+//            bargainParticipant2.setMatchId(bargainMatch.getId());
+//            bargainParticipantDao.update(bargainParticipant1);
+//            bargainParticipantDao.update(bargainParticipant2);
+//
+//            //设置这轮的开始时间
+//            bargainMatch.setBeginTime(new Timestamp(new Date().getTime()));
+//            bargainMatch.setCycle(bargainExperiments.getCurrentCycle());
+//            bargainMatchDao.update(bargainMatch);
+
+
+            //搜索剩下的空闲参与者,挑选一个
+            BargainParticipant lazyBargainParticipant = findLazyParticipant(bargainExperiments, bargainParticipantIdList);
+
+
+            if (lazyBargainParticipant == null) {
+                return true;
+            } else {
+                List<BargainMatch> bargainMatchList2 = findBargainMatchesByParticipant(bargainExperiments, lazyBargainParticipant, bargainMatchIdList);
+                if (bargainMatchList2 == null || bargainMatchList2.size() == 0) {
+                    return false;
+                } else {
+                    bargainMatchIdList.add(bargainMatch.getId());
+                    bargainParticipantIdList.add(bargainParticipant1.getId());
+                    bargainParticipantIdList.add(bargainParticipant2.getId());
+
+                    for (BargainMatch bargainMatch1 : bargainMatchList2) {
+                        if (canMatch(bargainMatch1, bargainExperiments, copyBargainParticipantIdList(bargainParticipantIdList), copyBargainMatchIdList(bargainMatchIdList))) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+//            //还原状态
+//            bargainParticipant1.setStatus("空闲中");
+//            bargainParticipant1.setCurrentCycle(bargainParticipant1.getCurrentCycle() - 1);//周期往后推1
+//
+//            bargainParticipant2.setStatus("空闲中");
+//            bargainParticipant2.setCurrentCycle(bargainParticipant2.getCurrentCycle() - 1);//周期往后推1
+//
+//            bargainParticipant1.setMatchId(null);
+//            bargainParticipant2.setMatchId(null);
+//
+//            bargainParticipantDao.update(bargainParticipant1);
+//            bargainParticipantDao.update(bargainParticipant2);
+//
+//            bargainMatch.setBeginTime(null);
+//            bargainMatch.setCycle(null);
+//            bargainMatchDao.update(bargainMatch);
+        }
+
+
+        return false;
+    }
+
+    private List<Integer> copyBargainMatchIdList(List<Integer> bargainMatchIdList) {
+        List<Integer> bargainMatchIds = new ArrayList<>();
+        for (int i = 0; i < bargainMatchIdList.size(); i++) {
+            bargainMatchIds.add(new Integer(bargainMatchIdList.get(i)));
+        }
+        return bargainMatchIds;
+    }
+
+    private List<Integer> copyBargainParticipantIdList(List<Integer> bargainParticipantIdList) {
+        List<Integer> bargainParticipantsIds = new ArrayList<>();
+        for (Integer bargainParticipantId : bargainParticipantIdList) {
+            bargainParticipantsIds.add(new Integer(bargainParticipantId));
+        }
+        return bargainParticipantsIds;
+    }
+
+    private List<BargainMatch> findBargainMatchesByParticipant(
+            BargainExperiments bargainExperiments,
+            BargainParticipant lazyBargainParticipant, List<Integer> bargainMatchIdList) {
+        List<BargainMatch> list = new ArrayList<>();
+        try {
+            String queryString = "from " + typeClass().getCanonicalName()
+                    + " as a ,BargainParticipant as b,BargainParticipant as c "
+                    + " where a.participantId = b.id and a.experimentId = b.experimentId and "
+                    + " a.secondParticipantId = c.id and a.experimentId = c.experimentId"
+                    + " and b.status = '空闲中' and c.status = '空闲中'"
+                    + " and a.experimentId = :experimentId and a.participantId = :participantId and a.status = '未完成'";
+            Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            Query query = session.createQuery(queryString);
+            query.setInteger("experimentId", bargainExperiments.getId());
+            query.setInteger("participantId", lazyBargainParticipant.getId());
+            List pojos = query.list();
+            session.getTransaction().commit();
+
+            if (pojos.size() == 0) {
+                return list;
+            }
+
+
+            Iterator iterator = pojos.iterator();
+            for (; iterator.hasNext(); ) {
+                Object[] objects = (Object[]) iterator.next();
+                BargainMatch bargainMatch = (BargainMatch) objects[0];
+                BargainParticipant bargainParticipant1 = (BargainParticipant) objects[1];
+                BargainParticipant bargainParticipant2 = (BargainParticipant) objects[2];
+
+                if (bargainParticipant1.getStatus().equals("空闲中")
+                        && bargainParticipant1.getCurrentCycle() < bargainExperiments.getCurrentCycle()
+                        && bargainParticipant2.getStatus().equals("空闲中")
+                        && bargainParticipant2.getCurrentCycle() < bargainExperiments.getCurrentCycle()) {// 符合周期条件
+                    boolean flag = true;
+                    for (Integer bargainMatchId : bargainMatchIdList) {
+                        if (bargainMatchId.equals(bargainMatch.getId())) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        list.add(bargainMatch);
+                    }
+                }
+            }
+            return list;
+        } catch (RuntimeException re) {
+            throw re;
+        }
+    }
+
+
+    /**
+     * 寻找空闲的参与者
+     *
+     * @param bargainExperiments
+     * @return
+     */
+    private BargainParticipant findLazyParticipant(BargainExperiments bargainExperiments, List<Integer> bargainParticipantIdList) {
+        String queryString = "from BargainParticipant as a  where a.experimentId = :experimentId and a.status='空闲中'";
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        Query query = session.createQuery(queryString);
+        query.setInteger("experimentId", bargainExperiments.getId());
+        List<BargainParticipant> pojos = query.list();
+        session.getTransaction().commit();
+        if (pojos.size() != 0) {
+            for (BargainParticipant bargainParticipant : pojos) {
+                for (Integer bargainParticipantId : bargainParticipantIdList) {
+                    if (bargainParticipantId.equals(bargainParticipant.getId())) {
+                        continue;
+                    }
+                }
+                return bargainParticipant;
+            }
+        }
+        return null;
     }
 
     /**
@@ -278,4 +528,48 @@ public class BargainMatchDao extends BaseDao<BargainMatch> {
             throw re;
         }
     }
+
+    /**
+     * 修正匹配中另一个参与者未匹配上的情况
+     *
+     * @param participantId
+     * @param experimentId
+     */
+    public void refine(int participantId, int experimentId) {
+        BargainParticipant bargainParticipant = bargainParticipantDao.findByKey(participantId);
+        BargainExperiments bargainExperiments = bargainExperimentsDao.findByKey(experimentId);
+
+        if (bargainParticipant.getCurrentCycle() < bargainExperiments.getCurrentCycle()) {
+            String queryString = "from BargainMatch  as a ,BargainParticipant as b,BargainParticipant as c "
+                    + " where a.participantId = b.id and a.experimentId = b.experimentId and "
+                    + " a.secondParticipantId = c.id and a.experimentId = c.experimentId"
+                    + " and a.experimentId = :experimentId and (a.participantId = :participantId or a.secondParticipantId =:participantId) " +
+                    "and a.status != '未完成' and a.cycle= :cycle";
+            Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            Query query = session.createQuery(queryString);
+            query.setInteger("experimentId", experimentId);
+            query.setInteger("participantId", participantId);
+            query.setInteger("cycle", bargainParticipant.getCurrentCycle() + 1);
+
+            List pojos = query.list();
+            session.getTransaction().commit();
+
+            Iterator iterator = pojos.iterator();
+
+            if (iterator.hasNext()) {
+                Object[] objects = (Object[]) iterator.next();
+                BargainMatch bargainMatch = (BargainMatch) objects[0];
+                BargainParticipant bargainParticipant1 = (BargainParticipant) objects[1];
+                BargainParticipant bargainParticipant2 = (BargainParticipant) objects[2];
+
+                bargainParticipant.setMatchId(bargainMatch.getId());
+                bargainParticipant.setStatus("谈判中");
+                bargainParticipant.setCurrentCycle(bargainExperiments.getCurrentCycle());
+
+                bargainParticipantDao.update(bargainParticipant);
+            }
+        }
+    }
+
 }
