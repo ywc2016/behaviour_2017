@@ -149,11 +149,11 @@
                     bargainMatch.setEndTime(new Timestamp(bargainMatch.getBeginTime().getTime()
                             + bargainParameter.getOneRoundTime() * 1000));
 
-                    if (identity.equals("first")) {
-                        bargainMatch.setParticipantStatus("出价完毕");
-                    } else {
-                        bargainMatch.setSecomdParticipantStatus("出价完毕");
-                    }
+//                    if (identity.equals("first")) {
+//                        bargainMatch.setParticipantStatus("出价完毕");
+//                    } else {
+//                        bargainMatch.setSecomdParticipantStatus("出价完毕");
+//                    }
 
                     BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
 
@@ -175,18 +175,62 @@
                 }
             }
 
-
-            if (bargainData.getBeginTime() != null) {
+            if (bargainData.getFinishTime() != null) {
                 long leftDecisionSeconds = (bargainParameter.getDecisionTime()
-                        - (new Date().getTime() - bargainData.getBeginTime().getTime()) / 1000) >= 0
+                        - (new Date().getTime() - bargainData.getFinishTime().getTime()) / 1000) >= 0
                         ? (bargainParameter.getDecisionTime()
-                        - (new Date().getTime() - bargainData.getBeginTime().getTime()) / 1000)
+                        - (new Date().getTime() - bargainData.getFinishTime().getTime()) / 1000)
                         : 0;
                 J_return.put("leftDecisionSeconds", leftDecisionSeconds);
 
-//                System.out.println("aaa-- " + leftDecisionSeconds);
-//                System.out.println(bargainData.getFinishTime());
 
+                if (bargainMatch.getParticipantStatus().equals("查看结果")
+                        && bargainMatch.getSecomdParticipantStatus().equals("查看结果")) {//本次谈判已经结束
+                    J_return.put("action", "timeout");
+                    out.clear();
+                    out.println(J_return);
+                    return;
+                }
+
+
+                if (leftDecisionSeconds == 0 && !(bargainMatch.getParticipantStatus().equals("查看结果")
+                        && bargainMatch.getSecomdParticipantStatus().equals("查看结果"))) {//写入谈判终止时间
+
+                    Date now = new Date();
+                    //bargainMatch设置谈判结束时间
+                    //超过最大时限 设置为最长谈判时间时间
+                    bargainData.setFinishTime(new Timestamp(bargainData.getBeginTime().getTime()
+                            + bargainParameter.getDecisionTime() * 1000));
+                    bargainData.setAcceptStatus(3);
+                    bargainDataDao.update(bargainData);
+
+                    bargainMatch.setEndTime(new Timestamp(bargainMatch.getBeginTime().getTime()
+                            + bargainParameter.getOneRoundTime() * 1000));
+
+
+                    BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
+
+                    bargainMatch.setSupplierProfits(bargainPointCalculate.calculateDisagreeSupplier(bargainData.getPrice(),
+                            bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
+                            bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
+                            bargainExperiments.getRandomNeed()));
+
+                    bargainMatch.setRetailerProfits(bargainPointCalculate.calculateDisagreeRetailer(bargainData.getPrice(),
+                            bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
+                            bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
+                            bargainExperiments.getRandomNeed()));
+
+                    bargainMatch.setParticipantStatus("查看结果");
+                    bargainMatch.setSecomdParticipantStatus("查看结果");
+                    bargainMatchDao.update(bargainMatch);
+
+                    J_return.put("action", "timeout");
+                }
+
+
+            } else {
+                J_return.put("action", "重新登录");
+                return;
             }
 
         } else {//已结束
@@ -201,7 +245,8 @@
         bargainDataDao.update(bargainData);
 
         BargainData bargainData2 = new BargainData();
-        bargainData2.setBeginTime(new Timestamp(new Date().getTime()));
+//        bargainData2.setBeginTime(new Timestamp(new Date().getTime()));
+        bargainData2.setBeginTime(bargainData.getFinishTime());//以上一次决策结束时间作为开始时间
         bargainData2.setMatchId(bargainMatch.getId());
         bargainDataDao.save(bargainData2);
         if (identity.equals("first")) {

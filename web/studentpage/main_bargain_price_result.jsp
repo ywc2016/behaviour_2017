@@ -179,5 +179,5 @@
 </table>
 <jsp:include page="../foot.jsp"/>
 </body>
-<script language="javascript" src="js/main_bargain_price_result_201711221418.js"></script>
+<script language="javascript" src="js/main_bargain_reply_price_201711241737.js"></script>
 </html>

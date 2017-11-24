@@ -38,8 +38,10 @@
             bargainParameter = bargainParameterDao.findByKey(bargainExperiments.getParId());
         } catch (Exception e) {
             //刷新页面
-            response.sendRedirect(basePath + "studentpage/login.jsp");
             e.printStackTrace();
+            JSONObject J_return = new JSONObject();
+            J_return.put("action", "重新登录");
+            return;
         }
 
     }

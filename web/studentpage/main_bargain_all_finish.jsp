@@ -66,10 +66,11 @@
                         .findByKey(bargainMatch1.getExperimentId());
                 BargainData bargainData2 = bargainMatch1.getCurrentDataId() == null ? null
                         : bargainDataDao.findByKey(bargainMatch1.getCurrentDataId());
+
                 if (bargainMatch1.getParticipantId().equals(bargainParticipant.getId())) {
-                    revenue[i++] = bargainMatch1.getSupplierProfits();
+                    revenue[i++] = bargainMatch1.getSupplierProfits() == null ? 0 : bargainMatch1.getSupplierProfits();
                 } else {
-                    revenue[i++] = bargainMatch1.getRetailerProfits();
+                    revenue[i++] = bargainMatch1.getRetailerProfits() == null ? 0 : bargainMatch1.getRetailerProfits();
                 }
             }
         }
