@@ -37,8 +37,8 @@
     row1.createCell(5).setCellValue("零售商利润");
     row1.createCell(6).setCellValue("开始时间");
     row1.createCell(7).setCellValue("结束时间");
-    row1.createCell(8).setCellValue("");
-    row1.createCell(9).setCellValue("");
+    row1.createCell(8).setCellValue("供应商需求");
+    row1.createCell(9).setCellValue("零售商需求");
     row1.createCell(10).setCellValue("谈判价格");
     row1.createCell(11).setCellValue("谈判数量");
     row1.createCell(12).setCellValue("出价者");
@@ -104,6 +104,16 @@
         }
         if (bargainMatch.getEndTime() != null) {
             row.createCell(cellColInd++).setCellValue(sdf.format(bargainMatch.getEndTime()));
+        } else {
+            row.createCell(cellColInd++).setCellValue("");
+        }
+        if (bargainMatch.getSupplierDemand() != null) {
+            row.createCell(cellColInd++).setCellValue(sdf.format(bargainMatch.getSupplierDemand()));
+        } else {
+            row.createCell(cellColInd++).setCellValue("");
+        }
+        if (bargainMatch.getRetailerDemand() != null) {
+            row.createCell(cellColInd++).setCellValue(sdf.format(bargainMatch.getRetailerDemand()));
         } else {
             row.createCell(cellColInd++).setCellValue("");
         }

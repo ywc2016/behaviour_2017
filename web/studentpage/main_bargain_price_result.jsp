@@ -37,9 +37,9 @@
                 + "</span>，你的谈判对象是" + (identity.equals("first") ? "零售商" : "生产商") + "。<br/>"
                 + (identity.equals("first")
                 ? ("你的生产能力为<span class='me'>" + bargainParameter.getK() + "</span>， 单位生产成本为<span class='me'>" + bargainParameter.getC()
-                + "。</span><br/> 你的市场需求如图所示，你和零售商销售到市场的价格都为<span class='me'>" + bargainParameter.getP()) + "</span>"
+                + "。</span><br/> 你和零售商销售到市场的价格都为<span class='me'>" + bargainParameter.getP()) + "</span>"
                 : ("生产商的生产能力为" + bargainParameter.getK() + "， 单位生产成本为" + bargainParameter.getC()
-                + "。<br/> 你的市场需求如图所示，你和生产商销售到市场的价格都为<span class='me'>" + bargainParameter.getP())) + "。</span>";
+                + "。<br/> 你和生产商销售到市场的价格都为<span class='me'>" + bargainParameter.getP())) + "。</span>";
     } catch (Exception e) {
         out.println("生成页面数据失败，");
         response.sendRedirect(basePath + "studentpage/login.jsp");
@@ -128,19 +128,19 @@
                             continue;
                         }
                         double myProfit1 = identity.equals("first")
-                                ? bargainPointCalculate.calculateAgreeSupplier(bargainData2.getPrice(), bargainData2.getQuantity(), bargainParameter.getK(),
+                                ? bargainPointCalculate.calculateExpectedAgreeSupplier(bargainData2.getPrice(), bargainData2.getQuantity(), bargainParameter.getK(),
                                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                                bargainParameter.getP(), bargainExperiments.getRandomNeed())
-                                : bargainPointCalculate.calculateAgreeRetailer(bargainData2.getPrice(), bargainData2.getQuantity(), bargainParameter.getK(),
+                                bargainParameter.getP())
+                                : bargainPointCalculate.calculateExpectedAgreeRetailer(bargainData2.getPrice(), bargainData2.getQuantity(), bargainParameter.getK(),
                                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                                bargainParameter.getP(), bargainExperiments.getRandomNeed());
+                                bargainParameter.getP());
                         double oppositeProfit1 = identity.equals("first")
-                                ? bargainPointCalculate.calculateAgreeRetailer(bargainData2.getPrice(), bargainData2.getQuantity(), bargainParameter.getK(),
+                                ? bargainPointCalculate.calculateExpectedAgreeRetailer(bargainData2.getPrice(), bargainData2.getQuantity(), bargainParameter.getK(),
                                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                                bargainParameter.getP(), bargainExperiments.getRandomNeed())
-                                : bargainPointCalculate.calculateAgreeSupplier(bargainData2.getPrice(), bargainData2.getQuantity(), bargainParameter.getK(),
+                                bargainParameter.getP())
+                                : bargainPointCalculate.calculateExpectedAgreeSupplier(bargainData2.getPrice(), bargainData2.getQuantity(), bargainParameter.getK(),
                                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                                bargainParameter.getP(), bargainExperiments.getRandomNeed());
+                                bargainParameter.getP());
                 %>
                 <tr <%=bargainData2.getParticipantId().equals(bargainParticipant.getId()) ? "class='me'" : ""%>>
                     <td><%=i++%>
@@ -151,9 +151,9 @@
                     </td>
                     <td><%=bargainData2.getQuantity()%>
                     </td>
-                    <td class="me"><%=myProfit1%>
+                    <td class="me"><%=df.format(myProfit1)%>
                     </td>
-                    <td style="color: black"><%=oppositeProfit1%>
+                    <td style="color: black"><%=df.format(oppositeProfit1)%>
                     </td>
                 </tr>
                 <%
@@ -179,5 +179,5 @@
 </table>
 <jsp:include page="../foot.jsp"/>
 </body>
-<script language="javascript" src="js/main_bargain_reply_price_201711241737.js"></script>
+<script language="javascript" src="js/main_bargain_price_result_201711241737.js"></script>
 </html>

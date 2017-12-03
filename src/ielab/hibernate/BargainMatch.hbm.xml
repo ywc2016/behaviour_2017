@@ -67,5 +67,15 @@
                 <comment>当前所处周期</comment>
             </column>
         </property>
+        <property name="supplierDemand" type="java.lang.Integer">
+            <column name="supplier_demand">
+                <comment>供应商需求</comment>
+            </column>
+        </property>
+        <property name="retailerDemand" type="java.lang.Integer">
+            <column name="retailer_demand">
+                <comment>零售商需求</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

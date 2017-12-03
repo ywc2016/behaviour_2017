@@ -1,11 +1,8 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
-<%@page import="ielab.dao.BargainDataDao" %>
-<%@page import="ielab.dao.BargainMatchDao" %>
-<%@page import="ielab.dao.BargainParameterDao" %>
-<%@page import="ielab.dao.BargainParticipantDao" %>
-<%@page import="ielab.hibernate.*" %>
+<%@page import="ielab.hibernate.BargainData" %>
+<%@page import="ielab.hibernate.BargainMatch" %>
+<%@page import="ielab.hibernate.BargainParameter" %>
 <%@page import="ielab.util.BargainPointCalculate" %>
-<%@page import="ielab.util.StringUtils" %>
 <%@page import="org.apache.commons.logging.Log" %>
 <%@page import="org.apache.commons.logging.LogFactory" %>
 <%@page import="org.json.simple.JSONObject" %>
@@ -157,15 +154,14 @@
 
                     BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
 
-                    bargainMatch.setSupplierProfits(bargainPointCalculate.calculateDisagreeSupplier(bargainData.getPrice(),
+                    bargainMatch.setSupplierProfits(bargainPointCalculate.calculateOneDisagreeSupplier(bargainData.getPrice(),
                             bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
                             bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
-                            bargainExperiments.getRandomNeed()));
+                            bargainMatch.getSupplierDemand()));
 
-                    bargainMatch.setRetailerProfits(bargainPointCalculate.calculateDisagreeRetailer(bargainData.getPrice(),
+                    bargainMatch.setRetailerProfits(bargainPointCalculate.calculateOneDisagreeRetailer(bargainData.getPrice(),
                             bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
-                            bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
-                            bargainExperiments.getRandomNeed()));
+                            bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(), bargainMatch.getRetailerDemand()));
 
                     bargainMatch.setParticipantStatus("查看结果");
                     bargainMatch.setSecomdParticipantStatus("查看结果");
@@ -210,15 +206,15 @@
 
                     BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
 
-                    bargainMatch.setSupplierProfits(bargainPointCalculate.calculateDisagreeSupplier(bargainData.getPrice(),
+                    bargainMatch.setSupplierProfits(bargainPointCalculate.calculateOneDisagreeSupplier(bargainData.getPrice(),
                             bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
                             bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
-                            bargainExperiments.getRandomNeed()));
+                            bargainMatch.getSupplierDemand()));
 
-                    bargainMatch.setRetailerProfits(bargainPointCalculate.calculateDisagreeRetailer(bargainData.getPrice(),
+                    bargainMatch.setRetailerProfits(bargainPointCalculate.calculateOneDisagreeRetailer(bargainData.getPrice(),
                             bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
                             bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
-                            bargainExperiments.getRandomNeed()));
+                            bargainMatch.getRetailerDemand()));
 
                     bargainMatch.setParticipantStatus("查看结果");
                     bargainMatch.setSecomdParticipantStatus("查看结果");
@@ -285,14 +281,14 @@
         BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
 
         bargainMatch.setSupplierProfits(
-                bargainPointCalculate.calculateAgreeSupplier(bargainData.getPrice(), bargainData.getQuantity(),
+                bargainPointCalculate.calculateOneAgreeSupplier(bargainData.getPrice(), bargainData.getQuantity(),
                         bargainParameter.getK(), bargainParameter.getC(), bargainParameter.getA(),
-                        bargainParameter.getB(), bargainParameter.getP(), bargainExperiments.getRandomNeed()));
+                        bargainParameter.getB(), bargainParameter.getP(), bargainMatch.getSupplierDemand()));
 
         bargainMatch.setRetailerProfits(
-                bargainPointCalculate.calculateAgreeRetailer(bargainData.getPrice(), bargainData.getQuantity(),
+                bargainPointCalculate.calculateOneAgreeRetailer(bargainData.getPrice(), bargainData.getQuantity(),
                         bargainParameter.getK(), bargainParameter.getC(), bargainParameter.getA(),
-                        bargainParameter.getB(), bargainParameter.getP(), bargainExperiments.getRandomNeed()));
+                        bargainParameter.getB(), bargainParameter.getP(), bargainMatch.getRetailerDemand()));
 
         bargainMatch.setParticipantStatus("查看结果");
         bargainMatch.setSecomdParticipantStatus("查看结果");
@@ -326,12 +322,12 @@
 
         BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
 
-        bargainMatch.setSupplierProfits(bargainPointCalculate.calculateDisagreeSupplier(bargainData.getPrice(),
+        bargainMatch.setSupplierProfits(bargainPointCalculate.calculateAverageDisagreeSupplier(bargainData.getPrice(),
                 bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
                 bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
                 bargainExperiments.getRandomNeed()));
 
-        bargainMatch.setRetailerProfits(bargainPointCalculate.calculateDisagreeRetailer(bargainData.getPrice(),
+        bargainMatch.setRetailerProfits(bargainPointCalculate.calculateAverageDisagreeRetailer(bargainData.getPrice(),
                 bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
                 bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
                 bargainExperiments.getRandomNeed()));

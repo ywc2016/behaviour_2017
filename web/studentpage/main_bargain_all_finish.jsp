@@ -74,7 +74,6 @@
                 }
             }
         }
-        DecimalFormat df = new DecimalFormat("######0.00");
         Mean mean1 = new Mean();
         mean = mean1.evaluate(revenue);
         StandardDeviation standardDeviation = new StandardDeviation();

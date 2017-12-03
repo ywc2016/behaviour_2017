@@ -182,15 +182,13 @@
                     BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
 
 
-                    bargainMatch.setSupplierProfits(bargainPointCalculate.calculateDisagreeSupplier(bargainData.getPrice(),
+                    bargainMatch.setSupplierProfits(bargainPointCalculate.calculateOneDisagreeSupplier(bargainData.getPrice(),
                             bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
-                            bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
-                            bargainExperiments.getRandomNeed()));
+                            bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(), bargainMatch.getSupplierDemand()));
 
-                    bargainMatch.setRetailerProfits(bargainPointCalculate.calculateDisagreeRetailer(bargainData.getPrice(),
+                    bargainMatch.setRetailerProfits(bargainPointCalculate.calculateOneDisagreeRetailer(bargainData.getPrice(),
                             bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
-                            bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
-                            bargainExperiments.getRandomNeed()));
+                            bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(), bargainMatch.getRetailerDemand()));
 
                     bargainMatch.setParticipantStatus("查看结果");
                     bargainMatch.setSecomdParticipantStatus("查看结果");
@@ -246,14 +244,14 @@
         BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
 
         bargainMatch.setSupplierProfits(
-                bargainPointCalculate.calculateAgreeSupplier(bargainData.getPrice(), bargainData.getQuantity(),
+                bargainPointCalculate.calculateOneAgreeSupplier(bargainData.getPrice(), bargainData.getQuantity(),
                         bargainParameter.getK(), bargainParameter.getC(), bargainParameter.getA(),
-                        bargainParameter.getB(), bargainParameter.getP(), bargainExperiments.getRandomNeed()));
+                        bargainParameter.getB(), bargainParameter.getP(), bargainMatch.getSupplierDemand()));
 
         bargainMatch.setRetailerProfits(
-                bargainPointCalculate.calculateAgreeRetailer(bargainData.getPrice(), bargainData.getQuantity(),
+                bargainPointCalculate.calculateOneAgreeRetailer(bargainData.getPrice(), bargainData.getQuantity(),
                         bargainParameter.getK(), bargainParameter.getC(), bargainParameter.getA(),
-                        bargainParameter.getB(), bargainParameter.getP(), bargainExperiments.getRandomNeed()));
+                        bargainParameter.getB(), bargainParameter.getP(), bargainMatch.getRetailerDemand()));
 
         bargainMatch.setParticipantStatus("查看结果");
         bargainMatch.setSecomdParticipantStatus("查看结果");
@@ -288,12 +286,12 @@
 
         BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
 
-        bargainMatch.setSupplierProfits(bargainPointCalculate.calculateDisagreeSupplier(bargainData.getPrice(),
+        bargainMatch.setSupplierProfits(bargainPointCalculate.calculateAverageDisagreeSupplier(bargainData.getPrice(),
                 bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
                 bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
                 bargainExperiments.getRandomNeed()));
 
-        bargainMatch.setRetailerProfits(bargainPointCalculate.calculateDisagreeRetailer(bargainData.getPrice(),
+        bargainMatch.setRetailerProfits(bargainPointCalculate.calculateAverageDisagreeRetailer(bargainData.getPrice(),
                 bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
                 bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
                 bargainExperiments.getRandomNeed()));
@@ -337,41 +335,41 @@
 
         BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
         double myProfit1 = identity.equals("first")
-                ? bargainPointCalculate.calculateAgreeSupplier(price, quantity, bargainParameter.getK(),
+                ? bargainPointCalculate.calculateExpectedAgreeSupplier(price, quantity, bargainParameter.getK(),
                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                bargainParameter.getP(), bargainExperiments.getRandomNeed())
-                : bargainPointCalculate.calculateAgreeRetailer(price, quantity, bargainParameter.getK(),
+                bargainParameter.getP())
+                : bargainPointCalculate.calculateExpectedAgreeRetailer(price, quantity, bargainParameter.getK(),
                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                bargainParameter.getP(), bargainExperiments.getRandomNeed());
+                bargainParameter.getP());
         double oppositeProfit1 = identity.equals("first")
-                ? bargainPointCalculate.calculateAgreeRetailer(price, quantity, bargainParameter.getK(),
+                ? bargainPointCalculate.calculateExpectedAgreeRetailer(price, quantity, bargainParameter.getK(),
                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                bargainParameter.getP(), bargainExperiments.getRandomNeed())
-                : bargainPointCalculate.calculateAgreeSupplier(price, quantity, bargainParameter.getK(),
+                bargainParameter.getP())
+                : bargainPointCalculate.calculateExpectedAgreeSupplier(price, quantity, bargainParameter.getK(),
                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                bargainParameter.getP(), bargainExperiments.getRandomNeed());
+                bargainParameter.getP());
 
         double myProfit2 = identity.equals("first")
-                ? bargainPointCalculate.calculateDisagreeSupplier(price, quantity, bargainParameter.getK(),
+                ? bargainPointCalculate.calculateExpectedDisagreeSupplier(price, quantity, bargainParameter.getK(),
                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                bargainParameter.getP(), bargainExperiments.getRandomNeed())
-                : bargainPointCalculate.calculateDisagreeRetailer(price, quantity, bargainParameter.getK(),
+                bargainParameter.getP())
+                : bargainPointCalculate.calculateExpectedDisagreeRetailer(price, quantity, bargainParameter.getK(),
                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                bargainParameter.getP(), bargainExperiments.getRandomNeed());
+                bargainParameter.getP());
 
         double oppositeProfit2 = identity.equals("first")
-                ? bargainPointCalculate.calculateDisagreeRetailer(price, quantity, bargainParameter.getK(),
+                ? bargainPointCalculate.calculateExpectedDisagreeRetailer(price, quantity, bargainParameter.getK(),
                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                bargainParameter.getP(), bargainExperiments.getRandomNeed())
-                : bargainPointCalculate.calculateDisagreeSupplier(price, quantity, bargainParameter.getK(),
+                bargainParameter.getP())
+                : bargainPointCalculate.calculateExpectedDisagreeSupplier(price, quantity, bargainParameter.getK(),
                 bargainParameter.getC(), bargainParameter.getA(), bargainParameter.getB(),
-                bargainParameter.getP(), bargainExperiments.getRandomNeed());
+                bargainParameter.getP());
         JSONObject J_return = new JSONObject();
         J_return.put("action", action);
-        J_return.put("myProfit1", myProfit1);
-        J_return.put("myProfit2", myProfit2);
-        J_return.put("oppositeProfit1", oppositeProfit1);
-        J_return.put("oppositeProfit2", oppositeProfit2);
+        J_return.put("myProfit1", df.format(myProfit1));
+        J_return.put("myProfit2", df.format(myProfit2));
+        J_return.put("oppositeProfit1", df.format(oppositeProfit1));
+        J_return.put("oppositeProfit2", df.format(oppositeProfit2));
         out.clear();
         out.println(J_return);
         return;

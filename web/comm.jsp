@@ -3,6 +3,7 @@
 <%@ page import="ielab.hibernate.BargainExperiments" %>
 <%@ page import="ielab.hibernate.BargainParticipant" %>
 <%@ page import="ielab.util.StringUtils" %>
+<%@ page import="java.text.DecimalFormat" %>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -62,6 +63,9 @@
             }
         }
     }
+
+    DecimalFormat df = new DecimalFormat("######0.00");
+
 %>
 
 <base href="<%=basePath%>" data-genuitec-lp-enabled="false" data-genuitec-file-id="wc1-16"

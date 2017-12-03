@@ -24,6 +24,8 @@ public class BargainMatch implements java.io.Serializable {
 	private Timestamp beginTime;
 	private Timestamp endTime;
 	private Integer cycle;
+	private Integer supplierDemand;
+	private Integer retailerDemand;
 
 	// Constructors
 
@@ -34,7 +36,8 @@ public class BargainMatch implements java.io.Serializable {
 	/** full constructor */
 	public BargainMatch(Integer experimentId, Integer participantId, Integer secondParticipantId, String status,
 			String participantStatus, String secomdParticipantStatus, Integer currentDataId, Integer lastDataId,
-			Double supplierProfits, Double retailerProfits, Timestamp beginTime, Timestamp endTime, Integer cycle) {
+			Double supplierProfits, Double retailerProfits, Timestamp beginTime, Timestamp endTime, Integer cycle,
+			Integer supplierDemand, Integer retailerDemand) {
 		this.experimentId = experimentId;
 		this.participantId = participantId;
 		this.secondParticipantId = secondParticipantId;
@@ -48,6 +51,8 @@ public class BargainMatch implements java.io.Serializable {
 		this.beginTime = beginTime;
 		this.endTime = endTime;
 		this.cycle = cycle;
+		this.supplierDemand = supplierDemand;
+		this.retailerDemand = retailerDemand;
 	}
 
 	// Property accessors
@@ -162,6 +167,22 @@ public class BargainMatch implements java.io.Serializable {
 
 	public void setCycle(Integer cycle) {
 		this.cycle = cycle;
+	}
+
+	public Integer getSupplierDemand() {
+		return this.supplierDemand;
+	}
+
+	public void setSupplierDemand(Integer supplierDemand) {
+		this.supplierDemand = supplierDemand;
+	}
+
+	public Integer getRetailerDemand() {
+		return this.retailerDemand;
+	}
+
+	public void setRetailerDemand(Integer retailerDemand) {
+		this.retailerDemand = retailerDemand;
 	}
 
 }
