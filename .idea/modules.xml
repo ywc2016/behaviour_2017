@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/behaviour.iml" filepath="$PROJECT_DIR$/behaviour.iml" />
+      <module fileurl="file://$PROJECT_DIR$/behaviour_onlyW.iml" filepath="$PROJECT_DIR$/behaviour_onlyW.iml" />
     </modules>
   </component>
 </project>
