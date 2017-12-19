@@ -73,6 +73,7 @@
                     if (bargainParticipant2.getCurrentCycle() < bargainExperiments.getCurrentCycle()
                             || !bargainParticipant2.getStatus().equals("空闲中")) {
                         flag = false;
+                        break;
                     }
                 }
                 if (flag && bargainExperiments.getCurrentCycle() <= 2
