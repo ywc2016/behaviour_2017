@@ -108,16 +108,17 @@
         } else if (identity.equals("second")) {
             bargainMatch.setSecomdParticipantStatus("匹配结束");
         }
-        //检查match的状态
-        if (bargainMatch.getParticipantStatus().equals("匹配结束")
-                && bargainMatch.getSecomdParticipantStatus().equals("匹配结束")) {
-            bargainMatch.setStatus("已完成");
-        }
+
 
         bargainParticipant.setStatus("空闲中");
         bargainParticipant.setMatchId(null);
         bargainParticipantDao.update(bargainParticipant);
 
+        //检查match的状态
+        if (bargainMatch.getParticipantStatus().equals("匹配结束")
+                && bargainMatch.getSecomdParticipantStatus().equals("匹配结束")) {
+            bargainMatch.setStatus("已完成");
+        }
         bargainMatchDao.update(bargainMatch);
 
 		/* //判断该用户是否已经完成所有的谈判,若是则修改该用户的status为谈判完毕
