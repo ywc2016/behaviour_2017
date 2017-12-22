@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d85f2ee5-d5ae-4d47-93e8-f755bd9a2368" name="Default" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/behaviour_war_exploded.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/behaviour_war_exploded.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/js/main_bargain_price_201711241736.js" afterPath="$PROJECT_DIR$/web/js/main_bargain_price_201711241736.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/studentpage/main_bargain_price_ajax.jsp" afterPath="$PROJECT_DIR$/web/studentpage/main_bargain_price_ajax.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/studentpage/main_bargain_reply_price_ajax.jsp" afterPath="$PROJECT_DIR$/web/studentpage/main_bargain_reply_price_ajax.jsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/studentpage/main_bargain_price.jsp" afterPath="$PROJECT_DIR$/web/studentpage/main_bargain_price.jsp" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/web/js/main_bargain_price_201711241736.js" afterPath="$PROJECT_DIR$/web/js/main_bargain_price_201712221647.js" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,7 +36,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main_bargain_price_ajax.jsp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main_bargain_price_ajax.jsp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/studentpage/main_bargain_price_ajax.jsp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-6">
@@ -58,21 +56,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main_bargain_price_201711241736.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/js/main_bargain_price_201711241736.js">
+      <file leaf-file-name="main_bargain_price_201712221647.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/js/main_bargain_price_201712221647.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="244">
-              <caret line="238" column="18" lean-forward="true" selection-start-line="238" selection-start-column="18" selection-end-line="238" selection-end-column="18" />
+              <caret line="238" column="18" lean-forward="false" selection-start-line="238" selection-start-column="18" selection-end-line="238" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main_bargain_price.jsp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main_bargain_price.jsp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/studentpage/main_bargain_price.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="22" column="72" lean-forward="false" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
+            <state relative-caret-position="426">
+              <caret line="217" column="7" lean-forward="true" selection-start-line="217" selection-start-column="7" selection-end-line="217" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -126,6 +124,7 @@
     <findStrings>
       <find>calculateAverageDisagreeSupplier</find>
       <find>reply</find>
+      <find>main_bargain_price_2017</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -175,6 +174,7 @@
         <option value="$PROJECT_DIR$/web/studentpage/main_bargain_reply_price_ajax.jsp" />
         <option value="$PROJECT_DIR$/web/js/main_bargain_price_201711241736.js" />
         <option value="$PROJECT_DIR$/web/studentpage/main_bargain_price_ajax.jsp" />
+        <option value="$PROJECT_DIR$/web/studentpage/main_bargain_price.jsp" />
       </list>
     </option>
   </component>
@@ -488,7 +488,7 @@
       <workItem from="1513253922769" duration="2765000" />
       <workItem from="1513669242205" duration="589000" />
       <workItem from="1513911210017" duration="344000" />
-      <workItem from="1513931926042" duration="475000" />
+      <workItem from="1513931926042" duration="532000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <created>1513255485928</created>
@@ -504,11 +504,18 @@
       <option name="project" value="LOCAL" />
       <updated>1513255821326</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="1">
+      <created>1513932419116</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1513932419116</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4173000" />
+    <option name="totallyTimeSpent" value="4230000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
@@ -745,14 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/studentpage/main_bargain_price.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="22" column="72" lean-forward="false" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/js/main_bargain_reply_price_201711241737.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
@@ -761,10 +760,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/js/main_bargain_price_201711241736.js">
+    <entry file="file://$PROJECT_DIR$/web/js/main_bargain_price_201712221647.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="244">
-          <caret line="238" column="18" lean-forward="true" selection-start-line="238" selection-start-column="18" selection-end-line="238" selection-end-column="18" />
+          <caret line="238" column="18" lean-forward="false" selection-start-line="238" selection-start-column="18" selection-end-line="238" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -773,6 +772,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-6">
           <caret line="305" column="20" lean-forward="false" selection-start-line="305" selection-start-column="20" selection-end-line="305" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/studentpage/main_bargain_price.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="217" column="7" lean-forward="true" selection-start-line="217" selection-start-column="7" selection-end-line="217" selection-end-column="7" />
           <folding />
         </state>
       </provider>
