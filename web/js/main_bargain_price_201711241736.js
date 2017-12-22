@@ -231,26 +231,26 @@ function pushData() {
 // console.log("a");
 }
 
-function reply(i) {
-    if (i == 1) { // 接受出价
-        send_request("GET", basePath
-            + "studentpage/main_bargain_price_ajax.jsp?action=reply1&time="
-            + Math.random(), null, "text", pushData);
-        return;
-    }
-    if (i == 2) { // 继续谈判
-        send_request("GET", basePath
-            + "studentpage/main_bargain_price_ajax.jsp?action=reply2&time="
-            + Math.random(), null, "text", pushData);
-        return;
-    }
-    if (i == 3) { // 终止谈判
-        send_request("GET", basePath
-            + "studentpage/main_bargain_price_ajax.jsp?action=reply3&time="
-            + Math.random(), null, "text", pushData);
-        return;
-    }
-}
+// function reply(i) {
+//     if (i == 1) { // 接受出价
+//         send_request("GET", basePath
+//             + "studentpage/main_bargain_price_ajax.jsp?action=reply1&time="
+//             + Math.random(), null, "text", pushData);
+//         return;
+//     }
+//     if (i == 2) { // 继续谈判
+//         send_request("GET", basePath
+//             + "studentpage/main_bargain_price_ajax.jsp?action=reply2&time="
+//             + Math.random(), null, "text", pushData);
+//         return;
+//     }
+//     if (i == 3) { // 终止谈判
+//         send_request("GET", basePath
+//             + "studentpage/main_bargain_price_ajax.jsp?action=reply3&time="
+//             + Math.random(), null, "text", pushData);
+//         return;
+//     }
+// }
 
 /**
  * 查看结果完毕

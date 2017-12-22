@@ -321,16 +321,14 @@
         }
 
         BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
+        bargainMatch.setSupplierProfits(bargainPointCalculate.calculateOneDisagreeSupplier(bargainData.getPrice(),
+                bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
+                bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(), bargainMatch.getSupplierDemand()));
 
-        bargainMatch.setSupplierProfits(bargainPointCalculate.calculateAverageDisagreeSupplier(bargainData.getPrice(),
+        bargainMatch.setRetailerProfits(bargainPointCalculate.calculateOneDisagreeRetailer(bargainData.getPrice(),
                 bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
                 bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
-                bargainExperiments.getRandomNeed()));
-
-        bargainMatch.setRetailerProfits(bargainPointCalculate.calculateAverageDisagreeRetailer(bargainData.getPrice(),
-                bargainData.getQuantity(), bargainParameter.getK(), bargainParameter.getC(),
-                bargainParameter.getA(), bargainParameter.getB(), bargainParameter.getP(),
-                bargainExperiments.getRandomNeed()));
+                bargainMatch.getRetailerDemand()));
 
         bargainMatch.setParticipantStatus("查看结果");
         bargainMatch.setSecomdParticipantStatus("查看结果");
