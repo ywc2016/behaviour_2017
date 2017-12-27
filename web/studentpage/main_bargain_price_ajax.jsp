@@ -209,7 +209,7 @@
         out.println(J_return);
         return;
 
-    } else if (action.equals("reply2")) {//继续谈判
+    }/* else if (action.equals("reply2")) {//继续谈判
         bargainData.setAcceptStatus(2);
         bargainDataDao.update(bargainData);
 
@@ -306,7 +306,7 @@
         out.clear();
         out.println(J_return);
         return;
-    } else if (action.equals("finishCheck")) {
+    }*/ else if (action.equals("finishCheck")) {
         if (identity.equals("first")) {
             bargainMatch.setParticipantStatus("匹配结束");
         } else if (identity.equals("second")) {

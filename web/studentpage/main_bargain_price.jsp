@@ -214,5 +214,5 @@
 
 <jsp:include page="../foot.jsp"/>
 </body>
-<script language="javascript" src="js/main_bargain_price_201711241736.js"></script>
+<script language="javascript" src="js/main_bargain_price_201712221647.js"></script>
 </html>

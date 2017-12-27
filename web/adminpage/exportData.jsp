@@ -108,12 +108,12 @@
             row.createCell(cellColInd++).setCellValue("");
         }
         if (bargainMatch.getSupplierDemand() != null) {
-            row.createCell(cellColInd++).setCellValue(sdf.format(bargainMatch.getSupplierDemand()));
+            row.createCell(cellColInd++).setCellValue(bargainMatch.getSupplierDemand());
         } else {
             row.createCell(cellColInd++).setCellValue("");
         }
         if (bargainMatch.getRetailerDemand() != null) {
-            row.createCell(cellColInd++).setCellValue(sdf.format(bargainMatch.getRetailerDemand()));
+            row.createCell(cellColInd++).setCellValue(bargainMatch.getRetailerDemand());
         } else {
             row.createCell(cellColInd++).setCellValue("");
         }

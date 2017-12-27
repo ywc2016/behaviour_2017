@@ -1,7 +1,6 @@
 package ielab.util;
 
 import ielab.dao.BargainExperimentsDao;
-import ielab.hibernate.BargainExperiments;
 
 import java.util.Arrays;
 import java.util.List;
@@ -180,12 +179,15 @@ public class BargainPointCalculate {
 
         BargainPointCalculate bargainPointCalculate = new BargainPointCalculate();
         BargainExperimentsDao bargainExperimentsDao = new BargainExperimentsDao();
-        BargainExperiments bargainExperiments = bargainExperimentsDao.findByKey(15);
-        double result1 = bargainPointCalculate.calculateAverageAgreeSupplier(w, Q, 120, 10, 50, 100, 40,
-                bargainExperiments.getRandomNeed());
-        System.out.println(result1);
-        double result2 = bargainPointCalculate.calculateAverageAgreeRetailer(w, Q, 120, 10, 50, 100, 40,
-                bargainExperiments.getRandomNeed());
-        System.out.println(result2);
+//        BargainExperiments bargainExperiments = bargainExperimentsDao.findByKey(15);
+//        double result1 = bargainPointCalculate.calculateAverageAgreeSupplier(w, Q, 120, 10, 50, 100, 40,
+//                bargainExperiments.getRandomNeed());
+//        System.out.println(result1);
+//        double result2 = bargainPointCalculate.calculateAverageAgreeRetailer(w, Q, 120, 10, 50, 100, 40,
+//                bargainExperiments.getRandomNeed());
+//        System.out.println(result2);
+
+        double d = bargainPointCalculate.calculateOneDisagreeSupplier(0.0, 0, 120, 10, 50, 100, 40, 96);
+        System.out.println(d);
     }
 }
