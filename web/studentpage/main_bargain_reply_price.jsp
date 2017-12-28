@@ -8,31 +8,35 @@
 <%@include file="../comm.jsp" %>
 <%
 
-    BargainParameter bargainParameter = bargainParameterDao.findByKey(bargainExperiments.getParId());
-
-    String participantStatus = bargainParticipant.getStatus();
 
     BargainMatch bargainMatch = null;
     String identity = null;
     BargainData bargainData = null;
     List<BargainData> bargainDatas = null;
-    if (participantStatus.equals("谈判中")) {
-        bargainMatch = bargainMatchDao.findByKey(bargainParticipant.getMatchId());
-
-        bargainData = bargainDataDao.findByKey(bargainMatch.getCurrentDataId());
-        bargainDatas = bargainDataDao.findHistory(bargainMatch.getId().intValue());
-
-        //判断是第一参与者还是第二参与者
-        if (bargainMatch.getParticipantId().equals(bargainParticipant.getId())) {
-            identity = "first";
-        } else {
-            identity = "second";
-        }
-    }
-
     String title = "";
-
+    BargainParameter bargainParameter = null;
+    String participantStatus = null;
     try {
+
+        bargainParameter = bargainParameterDao.findByKey(bargainExperiments.getParId());
+
+        participantStatus = bargainParticipant.getStatus();
+
+        if (participantStatus.equals("谈判中")) {
+            bargainMatch = bargainMatchDao.findByKey(bargainParticipant.getMatchId());
+
+            bargainData = bargainDataDao.findByKey(bargainMatch.getCurrentDataId());
+            bargainDatas = bargainDataDao.findHistory(bargainMatch.getId().intValue());
+
+            //判断是第一参与者还是第二参与者
+            if (bargainMatch.getParticipantId().equals(bargainParticipant.getId())) {
+                identity = "first";
+            } else {
+                identity = "second";
+            }
+        }
+
+
         title = "你好，你是<span class='me'>" + (identity.equals("first") ? "生产商" : "零售商")
                 + "</span>，你的谈判对象是" + (identity.equals("first") ? "零售商" : "生产商") + "。<br/>"
                 + (identity.equals("first")
@@ -40,6 +44,8 @@
                 + "。</span><br/> 你和零售商销售到市场的价格都为<span class='me'>" + bargainParameter.getP()) + "</span>"
                 : ("生产商的生产能力为" + bargainParameter.getK() + "， 单位生产成本为" + bargainParameter.getC()
                 + "。<br/> 你和生产商销售到市场的价格都为<span class='me'>" + bargainParameter.getP())) + "。</span>";
+
+
     } catch (Exception e) {
         out.println("生成页面数据失败，");
         response.sendRedirect(basePath + "studentpage/login.jsp");

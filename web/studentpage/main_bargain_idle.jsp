@@ -5,25 +5,12 @@
 <%
 
     String participantStatus = null;
-    participantStatus = bargainParticipant.getStatus();
-
-
     BargainMatch bargainMatch = null;
     String identity = null;
-    if (participantStatus.equals("谈判中")) {
-        //BargainMatchDao bargainMatchDao = new BargainMatchDao();
-        //bargainMatch = bargainMatchDao.findByKey(bargainParticipant.getMatchId());
-        //判断是第一参与者还是第二参与者
-        //if(bargainMatch.getParticipantId().equals(bargainParticipant.getId())){
-        //identity = "first";
-        //	}else{
-        //identity = "second";
-        //	}
-    }
-
     String title = "";
-
     try {
+
+        participantStatus = bargainParticipant.getStatus();
         title = "你好，"/* +bargainParticipant.getNumber()+ */ + "你已经登陆成功，即将开始实验……";
         //title+="目前为实验的第"+CurrentCycle+"期。";
         //	title+="目前为实验的第"+CurrentCycle+"期,实验总共有"+exp.getDcParameters().getTotalCycle()+"期。";

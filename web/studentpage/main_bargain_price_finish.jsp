@@ -7,31 +7,37 @@
 <%@ page import="java.util.List" %>
 <%@include file="../comm.jsp" %>
 <%
-    BargainParameter bargainParameter = bargainParameterDao.findByKey(bargainExperiments.getParId());
-
-    String participantStatus = bargainParticipant.getStatus();
 
     BargainMatch bargainMatch = null;
     String identity = null;
     BargainData bargainData = null;
     List<BargainData> bargainDatas = null;
-    if (participantStatus.equals("谈判中")) {
-        bargainMatch = bargainMatchDao.findByKey(bargainParticipant.getMatchId());
-
-        bargainData = bargainDataDao.findByKey(bargainMatch.getCurrentDataId());
-        bargainDatas = bargainDataDao.findHistory(bargainMatch.getId().intValue());
-
-        //判断是第一参与者还是第二参与者
-        if (bargainMatch.getParticipantId().equals(bargainParticipant.getId())) {
-            identity = "first";
-        } else {
-            identity = "second";
-        }
-    }
-
     String title = "";
+    BargainParameter bargainParameter = null;
+    String participantStatus = null;
 
     try {
+
+        bargainParameter = bargainParameterDao.findByKey(bargainExperiments.getParId());
+
+        participantStatus = bargainParticipant.getStatus();
+
+
+        if (participantStatus.equals("谈判中")) {
+            bargainMatch = bargainMatchDao.findByKey(bargainParticipant.getMatchId());
+
+            bargainData = bargainDataDao.findByKey(bargainMatch.getCurrentDataId());
+            bargainDatas = bargainDataDao.findHistory(bargainMatch.getId().intValue());
+
+            //判断是第一参与者还是第二参与者
+            if (bargainMatch.getParticipantId().equals(bargainParticipant.getId())) {
+                identity = "first";
+            } else {
+                identity = "second";
+            }
+        }
+
+
         title = "你好，你是<span class='me'>" + (identity.equals("first") ? "生产商" : "零售商")
                 + "</span>，你的谈判对象是" + (identity.equals("first") ? "零售商" : "生产商") + "。<br/>"
                 + (identity.equals("first")

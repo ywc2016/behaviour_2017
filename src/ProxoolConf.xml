@@ -5,7 +5,7 @@
     <proxool>
         <alias>pool1</alias>
         <!--proxool只能管理由自己产生的连接 -->
-        <driver-url>jdbc:mysql://localhost:3306/behaviour?useUnicode=true&amp;characterEncoding=UTF-8
+        <driver-url>jdbc:mysql://localhost:3306/behaviour_onetimeneed?useUnicode=true&amp;characterEncoding=UTF-8
         </driver-url>
         <driver-class>com.mysql.jdbc.Driver</driver-class>
         <driver-properties>
